@@ -7,13 +7,16 @@
   internal class Program
   {
     private const int colums = 3;
+    private const bool breakOnFail = true;
+    private const int tries = 1000000000;
+    private const int target = 177;
+    private const int threads = 100;
 
     static void Main(string[] args)
     {
+      Console.WriteLine("(Maximice Please) Start with Enter.");
+      Console.ReadLine();
       Stopwatch sw = Stopwatch.StartNew();
-      int tries = 1000000000;
-      int target = 177;
-      int threads = 100;
       int[] max = new int[threads];
       string[] console = new string[threads];
       Thread[] t = new Thread[threads];
@@ -71,13 +74,10 @@
         {
           int run = 0;
           int next = success;
-          while (run < target && next == success) if ((next = r.Next(1, 4)) == success) run++;
+          while (run < target && (!breakOnFail || next == success)) if ((next = r.Next(1, 4)) == success) run++;
           if (run > max) max = run;
           tries--;
-          if (tries % 10 == 0 || tries <= 0)
-          {
-            console[index] = string.Format("Thread {0:000} Remaining {1:0000000} Cur/Max {3}/{2}", index + (int)decimal.One, tries, max, run);
-          }
+          console[index] = string.Format("Thread {0:000} Remaining {1:0000000} Cur/Max {3}/{2}", index + (int)decimal.One, tries, max, run);
         }
         maxes[index] = max;
       });
