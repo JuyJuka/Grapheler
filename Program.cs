@@ -1,6 +1,7 @@
 ﻿namespace Grapheler
 {
   using System;
+  using System.Diagnostics;
   using System.Threading;
 
   internal class Program
@@ -9,6 +10,7 @@
 
     static void Main(string[] args)
     {
+      Stopwatch sw = Stopwatch.StartNew();
       int tries = 1000000000;
       int target = 177;
       int threads = 100;
@@ -34,9 +36,10 @@
         if (all < max[i])
           all = max[i];
       d.Join();
-      Console.SetCursorPosition(0, 0);
+      sw.Stop();
+      Draw(console, false);
       Console.WriteLine(string.Format("Final Max Result: {0}", all) + new string(' ', console[0].Length * colums));
-      Draw(console, true);
+      Console.WriteLine(string.Format("Elapsed Time: {0}", sw.Elapsed));
       Console.ReadLine();
     }
 
